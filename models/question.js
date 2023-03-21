@@ -35,10 +35,10 @@ if (mongoose.models.Question) {
       type: ObjectId,
       ref: 'Answer'
     }],
-    comments: [{
-      type: ObjectId,
-      ref: 'Comment'
-    }]
+    timestamp: {
+      type: Date,
+      default: Date.now
+    }
   });
 
   const Question = mongoose.model('Question', questionSchema);

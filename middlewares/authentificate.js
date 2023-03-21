@@ -6,7 +6,7 @@ module.exports = (req, res, next) => {
   const token = req.headers.authorization;
 
   if (!token) {
-    return res.status(401).json({ message: 'Auth failed TK' });
+    return res.status(401).json({ message: 'Auth failed' });
   }
 
   try {
@@ -15,14 +15,14 @@ module.exports = (req, res, next) => {
     User.findById(decoded.user.id)
       .then(user => {
         if (!user) {
-          return res.status(401).json({ message: 'Auth failed U' });
+          return res.status(401).json({ message: 'Auth failed' });
         }
         next();
       })
       .catch(err => {
-        return res.status(401).json({ message: 'Auth failed NU' });
+        return res.status(401).json({ message: 'Auth failed' });
       });
   } catch (error) {
-    return res.status(401).json({ message: 'Auth failed T' });
+    return res.status(401).json({ message: 'Auth failed' });
   }
 };
