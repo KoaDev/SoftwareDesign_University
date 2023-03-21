@@ -10,6 +10,7 @@
     "mongoose": "^7.0.1",
     "nodemon": "^2.0.21",
     "swagger-autogen": "^2.23.1",
+    "swagger-spec-to-pdf": "^1.1.0",
     "swagger-ui-express": "^4.6.2"
   },
   "name": "project_se_api_2023",
