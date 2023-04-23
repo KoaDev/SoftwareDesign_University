@@ -14,8 +14,8 @@ exports.createTag = async (req, res, next) => {
         const tag = new Tags({
             name: req.body.name
         });
-        const savedTag = await tag.save();
-        res.status(201).json(savedTag);
+        await tag.save();
+        res.status(201).json({ message: 'Tag created' });
     } catch (err) {
         res.status(500).json({ error: err });
     }

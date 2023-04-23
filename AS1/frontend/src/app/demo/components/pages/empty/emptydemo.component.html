@@ -1,0 +1,91 @@
+<div class="grid">
+    <div class="card">
+        <p-toast key="tst"></p-toast>
+        <div class="surface-section px-4 py-5 md:px-6 lg:px-8">
+            <ul class="list-none p-0 m-0 flex align-items-center font-medium mb-3">
+                <li>
+                    <a class="text-500 no-underline line-height-3 cursor-pointer">Question</a>
+                </li>
+                <li class="px-2">
+                    <i class="pi pi-angle-right text-500 line-height-3"></i>
+                </li>
+                <li>
+                    <span class="text-900 line-height-3">{{question[0].title}} </span>
+                </li>
+            </ul>
+            <div class="flex align-items-start flex-column lg:justify-content-between lg:flex-row">
+                <div>
+                    <p-fieldset legend="{{question[0].title}}" [toggleable]="true" class="line-height-3 m-0">
+                        {{question[0].body}}
+                    </p-fieldset>
+                    <div class="flex align-items-center text-700 flex-wrap">
+                        <div class="flex align-items-center mt-3">
+                            <p-tag class="p-button-outlined mr-2" value="{{question[0].timestamp}}"><i class="pi pi-clock mr-2"></i></p-tag>
+                            <p-tag class="p-button-outlined mr-2" severity="success" value="{{question[0].upvotes?.length ?? 0}}"></p-tag>
+                            <p-tag class="p-button-outlined mr-2" severity="danger" value="{{question[0].downvotes?.length ?? 0}}"></p-tag>
+                        </div>
+                    </div>
+                </div>
+                <p-dialog header="Dialog" [(visible)]="displayAddAnswer" [modal]="true" showEffect="fade" [style]="{width: '30vw'}" [breakpoints]="{'960px': '75vw'}">
+                    <textarea name="answerRequestBody" [(ngModel)]="answerRequest.body" class="p-inputtextarea p-inputtext p-component p-element" rows="5" cols="58" placeholder="Your Response" pInputTextarea></textarea>
+                    <ng-template pTemplate="footer">
+                            <button pButton icon="pi pi-check" (click)="postAnswer()" label="Ok" class="p-button-outlined"></button>
+                    </ng-template>
+                </p-dialog>
+                <div class="mt-3 lg:mt-0">
+                    <button (click)="displayAddAnswer=true" pButton icon="pi pi-user-plus" label="Reply" class="p-button-outlined mr-2"></button>    
+                    <button (click)="voteQuestion(_idQuestion, 'upvote')" *ngIf="_idUser != question[0].author" pButton pRipple class="p-button-outlined mr-2" icon="pi pi-thumbs-up-fill"></button>
+                    <button (click)="voteQuestion(_idQuestion, 'downvote')" *ngIf="_idUser != question[0].author" pButton pRipple class="p-button-outlined mr-2" icon="pi pi-thumbs-down-fill"></button>
+                    <button (click)="deleteQuestion(_idQuestion)" *ngIf="_idUser == _idQuestionAuthor" pButton pRipple class="p-button-outlined mr-2" icon="pi pi-trash"></button>
+                </div>
+            </div>
+        </div>
+        
+
+        <p-dialog header="Update Answer" [(visible)]="displayUpdateAnswer" [modal]="true" showEffect="fade" [style]="{width: '30vw'}" [breakpoints]="{'960px': '75vw'}">
+            <textarea name="answerRequestBody" [(ngModel)]="answerRequest.body" class="p-inputtextarea p-inputtext p-component p-element" rows="5" cols="58" pInputTextarea></textarea>
+            <ng-template pTemplate="footer">
+                    <button pButton icon="pi pi-check" (click)="updateAnswer()" label="Ok" class="p-button-outlined"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-timeline [value]="answer" align="alternate" styleClass="customized-timeline">
+            <ng-template pTemplate="marker" let-answer>
+                <span class="flex z-1 w-2rem h-2rem align-items-center justify-content-center text-white shadow-2">
+                    <p-tag value="{{calculateScore(answer)}}"></p-tag>
+                </span>
+            </ng-template>
+            <ng-template pTemplate="content" let-answer>
+                <p-card>
+                    <div class="flex align-items-start flex-column lg:justify-content-between lg:flex-row">
+                        <div>
+                            <div class="font-medium text-3xl text-900">{{answer.author.name}}</div>
+                            <div class="flex align-items-center text-700 flex-wrap">
+                                <div class="flex align-items-center mt-3">
+                                    <p-tag class="p-button-outlined mr-2" value="{{answer.timestamp}}"><i class="pi pi-clock mr-2"></i></p-tag>
+                                    <p-tag class="p-button-outlined mr-2" severity="success" value="{{answer.upvotes.length}}"></p-tag>
+                                    <p-tag class="p-button-outlined mr-2" severity="danger" value="{{answer.downvotes.length}}"></p-tag>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3 lg:mt-0">
+                            <button (click)="voteAnswer(answer._id, 'upvote')" *ngIf="_idUser != answer.author._id" pButton pRipple class="p-button-outlined mr-2" icon="pi pi-thumbs-up-fill"></button>
+                            <button (click)="voteAnswer(answer._id, 'downvote')" *ngIf="_idUser != answer.author._id" pButton pRipple class="p-button-outlined mr-2" icon="pi pi-thumbs-down-fill"></button>
+                            <button (click)="deleteAnswer(answer._id)" *ngIf="_idUser == answer.author._id" pButton pRipple class="p-button-outlined mr-2" icon="pi pi-trash"></button>
+                            <button (click)="openUpdateAnswerDialog(answer._id)" *ngIf="_idUser == answer.author._id" pButton icon="pi pi-pencil" class="p-button-outlined mr-2"></button>
+                        </div>
+                    </div>
+                    <p class="line-height-3 my-3">{{answer.body}}</p>
+                        <div class="flex flex-wrap gap-2">
+                            <p-tag value="Primary"></p-tag>
+                            <p-tag severity="success" value="Success"></p-tag>
+                            <p-tag severity="info" value="Info"></p-tag>
+                            <p-tag severity="warning" value="Warning"></p-tag>
+                            <p-tag severity="danger" value="Danger"></p-tag>
+                        </div>
+                </p-card>
+                <br>
+            </ng-template>
+        </p-timeline>
+    </div>
+</div>

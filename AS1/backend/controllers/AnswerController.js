@@ -46,11 +46,12 @@ exports.deleteAnswer = async (req, res) => {
     const answer = await Answer.findOneAndDelete({ _id: req.params.answerId, author: req.userData.user.id });
     if (!answer)
       return res.status(404).json({ error: 'Answer not found or unauthorized' });
-    res.sendStatus(200).json({ message: 'Answer deleted' });
+    res.status(200).json({ message: 'Answer deleted' });
   } catch (err) {
     res.status(500).json({ error: err });
   }
 };
+
 
 exports.getAnswerById = async (req, res) => {
   try {

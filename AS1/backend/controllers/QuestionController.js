@@ -15,7 +15,6 @@ const Question = require('../models/question');
   exports.getQuestionById = async (req, res) => {
     try {
       const question = await Question.findById(req.params.questionId)
-        .populate('author', 'name email')
         .populate({
           path: 'answers',
           populate: {

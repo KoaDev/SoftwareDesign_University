@@ -1,0 +1,96 @@
+<div class="grid">
+	<div class="col-12">
+		<p-toast key="tst"></p-toast>
+		<div class="card">
+			<h5>DataView</h5>
+			<p-dialog header="Add question" [(visible)]="displayAddQuestion" [modal]="true" showEffect="fade" [style]="{width: '30vw'}" [breakpoints]="{'960px': '75vw'}">
+					<div class="card p-fluid">
+						<div class="field">
+							<label htmlFor="questionRequestTitle">Title</label>
+							<input [(ngModel)]="questionRequest.title" pInputText id="questionRequestTitle" name="questionRequestTitle" type="text" />
+						</div>
+						<div class="field">
+							<label htmlFor="questionRequestBody">Body</label>
+							<textarea id="questionRequestBody" name="questionRequestBody" [(ngModel)]="questionRequest.body" class="p-inputtextarea p-inputtext p-component p-element" rows="5" cols="58" pInputTextarea></textarea>
+						</div>
+						<div class="field">
+							<label htmlFor="age1">Tags</label>
+							<p-chips [(ngModel)]="enteredTagsArray"></p-chips>
+						</div>
+					</div>
+				
+				<ng-template pTemplate="footer">
+						<button pButton icon="pi pi-check" (click)="addQuestion();" label="Ok" class="p-button-outlined"></button>
+				</ng-template>
+			</p-dialog>
+			<p-dataView #dv [value]="question" [paginator]="true" [rows]="9" filterBy="name" layout="grid">
+				<ng-template pTemplate="header">
+					<div class="flex flex-column md:flex-row md:justify-content-between gap-2">
+						<button (click)="displayAddQuestion=true" pButton icon="pi pi-user-plus" label="Add " class="p-button-outlined mr-2"></button>
+						<span class="p-input-icon-left">
+                            <i class="pi pi-search"></i>
+							<input type="search" pInputText placeholder="Search by Name">
+						</span>	
+						<p-dataViewLayoutOptions></p-dataViewLayoutOptions>
+					</div>
+				</ng-template>
+
+				<ng-template let-question pTemplate="listItem">
+					<div class="col-12">
+					  <div class="flex flex-column md:flex-row align-items-center p-3 w-full">
+						<div class="flex-1 flex flex-column align-items-center text-center md:text-left">
+						  <div class="font-bold text-2xl"><a href="#/pages/empty/{{question._id}}">{{question.title}}</a></div>
+						  <div class="flex align-items-center">
+							<i class="pi pi-user mr-2"></i>
+							<div class="flex flex-wrap gap-2">
+								<p-tag value="{{question.author.name}}"></p-tag>
+							</div>
+						</div>
+				  
+						  <div class="flex align-items-center mt-2">
+							<i class="pi pi-tag mr-2"></i>
+							<div class="flex flex-wrap gap-2">
+								<ng-container *ngFor="let tagId of question.tags">
+									<p-tag severity="success" value="{{tagsById[tagId]? tagsById[tagId].name : ''}}"></p-tag>
+								</ng-container>
+							</div>
+						  </div>
+						</div>
+					  </div>
+					</div>
+				  </ng-template>
+
+				  <ng-template let-question pTemplate="gridItem">
+					<div class="col-12 md:col-4">
+					  <div class="card m-3 border-1 surface-border">
+						<div class="flex flex-wrap gap-2 align-items-center justify-content-between mb-2">
+						  <div class="flex align-items-center">
+							<i class="pi pi-tag mr-2"></i>
+							<div class="flex flex-wrap gap-2">
+								<ng-container *ngFor="let tagId of question.tags">
+									
+										<p-tag severity="success" value="{{tagsById[tagId]? tagsById[tagId].name : ''}}"></p-tag>
+									
+								</ng-container>
+							</div>
+						  </div>
+						</div>
+						<div class="flex flex-column align-items-center text-center mb-3">
+
+						  <div class="text-2xl font-bold"><a href="#/pages/empty/{{question._id}}">{{question.title}}</a></div>
+							<div class="flex align-items-center">
+								<i class="pi pi-user mr-2"></i>
+								<div class="flex flex-wrap gap-2">
+									<p-tag value="{{question.author.name}}"></p-tag>
+								</div>
+							</div>
+						</div>
+					  </div>
+					</div>
+				  </ng-template>
+				  
+			</p-dataView>
+		</div>
+	</div>
+
+</div>
