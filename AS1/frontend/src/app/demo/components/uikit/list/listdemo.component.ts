@@ -4,6 +4,8 @@ import { QuestionService } from 'src/app/services/question.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { TagService } from 'src/app/services/tag.service';
 import { Tag } from 'src/app/models/tag';
+
+import { Router } from '@angular/router';
 import { Message, MessageService } from 'primeng/api';
 
 
@@ -35,7 +37,7 @@ export class ListDemoComponent implements OnInit {
     tagsById: { [tagId: string]: Tag } = {};
 
 
-    constructor(private service: MessageService, private QuestionService : QuestionService, private AuthService : AuthService, private TagService : TagService) { }
+    constructor(private Router : Router ,private service: MessageService, private QuestionService : QuestionService, private AuthService : AuthService, private TagService : TagService) { }
 
     ngOnInit(): void {
       this.TagService.get().subscribe({
@@ -115,6 +117,22 @@ export class ListDemoComponent implements OnInit {
             },
         });
     }
+
+    showAddQuestionPopup(): void {
+      if (this.AuthService.isLoggedIn()) {
+          this.displayAddQuestion = true;
+      } else {
+          this.service.add({ key: 'tst', severity: 'error', summary: 'Error', detail: 'You must be logged in to add a question.' });
+      }
+  }
+
+  navigateToQuestion(questionId: string): void {
+    if (this.AuthService.isLoggedIn()) {
+        this.Router.navigate(['/pages/empty', questionId]);
+    } else {
+        this.service.add({ key: 'tst', severity: 'error', summary: 'Error', detail: 'You must be logged in to view question details.' });
+    }
+}
     
     
 }

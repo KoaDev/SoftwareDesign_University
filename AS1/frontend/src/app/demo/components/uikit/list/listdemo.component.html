@@ -26,7 +26,7 @@
 			<p-dataView #dv [value]="question" [paginator]="true" [rows]="9" filterBy="name" layout="grid">
 				<ng-template pTemplate="header">
 					<div class="flex flex-column md:flex-row md:justify-content-between gap-2">
-						<button (click)="displayAddQuestion=true" pButton icon="pi pi-user-plus" label="Add " class="p-button-outlined mr-2"></button>
+						<button (click)="showAddQuestionPopup()" pButton icon="pi pi-user-plus" label="Add " class="p-button-outlined mr-2"></button>
 						<span class="p-input-icon-left">
                             <i class="pi pi-search"></i>
 							<input type="search" pInputText placeholder="Search by Name">
@@ -39,7 +39,7 @@
 					<div class="col-12">
 					  <div class="flex flex-column md:flex-row align-items-center p-3 w-full">
 						<div class="flex-1 flex flex-column align-items-center text-center md:text-left">
-						  <div class="font-bold text-2xl"><a href="#/pages/empty/{{question._id}}">{{question.title}}</a></div>
+							<div class="font-bold text-2xl" (click)="navigateToQuestion(question._id)">{{question.title}}</div>
 						  <div class="flex align-items-center">
 							<i class="pi pi-user mr-2"></i>
 							<div class="flex flex-wrap gap-2">
@@ -77,7 +77,8 @@
 						</div>
 						<div class="flex flex-column align-items-center text-center mb-3">
 
-						  <div class="text-2xl font-bold"><a href="#/pages/empty/{{question._id}}">{{question.title}}</a></div>
+							<div class="font-bold text-2xl" (click)="navigateToQuestion(question._id)">{{question.title}}</div>
+
 							<div class="flex align-items-center">
 								<i class="pi pi-user mr-2"></i>
 								<div class="flex flex-wrap gap-2">

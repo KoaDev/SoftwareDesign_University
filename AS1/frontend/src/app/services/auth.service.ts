@@ -27,4 +27,15 @@ export class AuthService {
 
     return null;
   }
+
+  isLoggedIn() {
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      return !this.jwtHelper.isTokenExpired(token);
+    }
+
+    return false;
+  }
+  
 }
