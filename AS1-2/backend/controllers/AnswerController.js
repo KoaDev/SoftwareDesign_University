@@ -100,4 +100,15 @@ exports.voteAnswer = async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err });
   }
+
+  getAuthorByAnswerId = async (req, res) => {
+    try {
+      const answer = await Answer.findById(req.params.answerId).populate('author', 'name email');
+      if (!answer) return res.status(404).json({ error: 'Answer not found' });
+      res.json(answer.author);
+    } catch (err) {
+      res.status(500).json({ error: err });
+    }
+  }
+
 };

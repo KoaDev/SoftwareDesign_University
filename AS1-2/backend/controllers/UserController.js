@@ -21,7 +21,9 @@ exports.createUser = async (req, res) => {
     user = new User({
       name,
       email,
-      password
+      password,
+      role: 'user',
+      score : 0
     });
 
     const salt = await bcrypt.genSalt(10);
@@ -72,7 +74,11 @@ exports.loginUser = async (req, res) => {
 
     const payload = {
       user: {
-        id: user.id
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        score: user.score
       }
     };
     jwt.sign(payload, config.jwtSecret, { expiresIn: '1h' }, (err, token) => {
@@ -95,39 +101,35 @@ exports.getAllUsers = async (req, res) => {
   }
 };
 
-exports.updateUser = async (req, res) => {
+exports.getUserScoreById = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId).select('score');
+    res.json(user);
+  } catch (err) {
+    res.status(500).send('Server error');
+  }
+};
+
+exports.updateUserScore = async (req, res) => {
   try {
 
-    const { name, email, password } = req.body;
+    const {score} = req.body;
 
-    let user = await User.findById(req.userData.user.id);
+    let user = await User.findById(req.params.userId);
     if (!user) {
       return res.status(400).json({ message: 'User does not exist' });
     }
 
-    user.name = name;
-    user.email = email;
-    user.password = password;
-
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(password, salt);
+    user.score = score;
     await user.save();
 
-    const payload = {
-      user: {
-        id: user.id
-      }
-    };
-    jwt.sign(payload, config.jwtSecret, { expiresIn: '1h' }, (err, token) => {
-      if (err) throw err;
-      res.json({ token });
-    });
+    res.json({ message: "User score updated" });
 
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server error');
   }
-}
+};
 
 exports.deleteUser = async (req, res) => {
   try {
@@ -147,4 +149,4 @@ exports.logoutUser = async (req, res) => {
     console.error(err.message);
     res.status(500).send('Server error');
   }
-}
+};

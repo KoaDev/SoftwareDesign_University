@@ -10,10 +10,13 @@ const auth = require('../middlewares/authentificate');
 
 router.get('/users/current', auth, userController.getCurrentUser);
 router.get('/users/all', auth, userController.getAllUsers);
+
+router.get('/users/:userId/score', userController.getUserScoreById);
+
 router.post('/users', userController.createUser);
 router.post('/login', userController.loginUser);
 router.post('/logout', auth, userController.logoutUser);
-router.put('/users/:userId', auth, userController.updateUser);
+router.put('/users/:userId/score', auth, userController.updateUserScore);
 router.delete('/users/:userId', auth, userController.deleteUser);
 
 router.get('/questions', questionController.getQuestions);
@@ -29,6 +32,7 @@ router.post('/questions/:questionId/answers', auth, answerController.createAnswe
 router.put('/answers/:answerId', auth, answerController.updateAnswer);
 router.delete('/answers/:answerId', auth, answerController.deleteAnswer);
 router.post('/answers/:answerId/vote', auth, answerController.voteAnswer);
+
 
 router.get('/tags', tagController.getTags);
 router.post('/tags', auth, tagController.createTag);

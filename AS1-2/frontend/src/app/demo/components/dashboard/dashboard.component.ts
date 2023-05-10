@@ -18,6 +18,10 @@ export class DashboardComponent implements OnInit {
     constructor(public layoutService: LayoutService, private AnswerService : AnswerService, private QuestionService : QuestionService, private AuthService : AuthService) { }
 
     ngOnInit() {
+        this.AuthService.getUserScoreById(this.AuthService.getUser().id).subscribe((user) => {
+            this.score = user.score;
+        });
+
         
     }
 }

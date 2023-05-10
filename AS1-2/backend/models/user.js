@@ -17,6 +17,14 @@ if (mongoose.models.User) {
     password: {
       type: String,
       required: true
+    },
+    role: {
+      type: String,
+      required: true
+    },
+    score : {
+      type: Number,
+      required: true
     }
   });
 

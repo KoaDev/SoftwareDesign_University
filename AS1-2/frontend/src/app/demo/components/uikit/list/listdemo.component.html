@@ -2,7 +2,7 @@
 	<div class="col-12">
 		<p-toast key="tst"></p-toast>
 		<div class="card">
-			<h5>DataView</h5>
+			<h5>Questions</h5>
 			<p-dialog header="Add question" [(visible)]="displayAddQuestion" [modal]="true" showEffect="fade" [style]="{width: '30vw'}" [breakpoints]="{'960px': '75vw'}">
 					<div class="card p-fluid">
 						<div class="field">
@@ -39,19 +39,19 @@
 					<div class="col-12">
 					  <div class="flex flex-column md:flex-row align-items-center p-3 w-full">
 						<div class="flex-1 flex flex-column align-items-center text-center md:text-left">
-							<div class="font-bold text-2xl" (click)="navigateToQuestion(question._id)">{{question.title}}</div>
+							<div class="font-bold text-2xl" (click)="navigateToQuestion(question._id)">{{getTitleQuestion(question)}}</div>
 						  <div class="flex align-items-center">
 							<i class="pi pi-user mr-2"></i>
 							<div class="flex flex-wrap gap-2">
-								<p-tag value="{{question.author.name}}"></p-tag>
+								<p-tag value="{{getAuthorQuestion(question)}}"></p-tag>
 							</div>
 						</div>
 				  
 						  <div class="flex align-items-center mt-2">
 							<i class="pi pi-tag mr-2"></i>
 							<div class="flex flex-wrap gap-2">
-								<ng-container *ngFor="let tagId of question.tags">
-									<p-tag severity="success" value="{{tagsById[tagId]? tagsById[tagId].name : ''}}"></p-tag>
+								<ng-container *ngFor="let tagId of getTagsQuestion(question)">
+									<p-tag severity="success" value="{{getTagById(tagId)}}"></p-tag>
 								</ng-container>
 							</div>
 						  </div>
@@ -67,17 +67,17 @@
 						  <div class="flex align-items-center">
 							<i class="pi pi-tag mr-2"></i>
 							<div class="flex flex-wrap gap-2">
-								<ng-container *ngFor="let tagId of question.tags">
+								<ng-container *ngFor="let tagId of getTagsQuestion(question)">
 									
-										<p-tag severity="success" value="{{tagsById[tagId]? tagsById[tagId].name : ''}}"></p-tag>
 									
+										<p-tag severity="success" value="{{getTagById(tagId)}}"></p-tag>
 								</ng-container>
 							</div>
 						  </div>
 						</div>
 						<div class="flex flex-column align-items-center text-center mb-3">
 
-							<div class="font-bold text-2xl" (click)="navigateToQuestion(question._id)">{{question.title}}</div>
+							<div class="font-bold text-2xl" (click)="navigateToQuestion(question._id)">{{getTitleQuestion(question)}}</div>
 
 							<div class="flex align-items-center">
 								<i class="pi pi-user mr-2"></i>

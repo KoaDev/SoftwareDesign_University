@@ -65,7 +65,7 @@ export class ListDemoComponent implements OnInit {
   }
 
 
-    async addQuestion(): Promise<void> {
+  async addQuestion(): Promise<void> {
         this.questionRequest.timestamp = new Date().toISOString();
         this.questionRequest.author = this.AuthService.getUser().id;
     
@@ -116,23 +116,44 @@ export class ListDemoComponent implements OnInit {
                 this.service.add({ key: 'tst', severity: 'error', summary: err.message, detail: 'Error' });
             },
         });
-    }
+  }
 
-    showAddQuestionPopup(): void {
+  showAddQuestionPopup(): boolean {
       if (this.AuthService.isLoggedIn()) {
-          this.displayAddQuestion = true;
+          return this.displayAddQuestion = true;
       } else {
           this.service.add({ key: 'tst', severity: 'error', summary: 'Error', detail: 'You must be logged in to add a question.' });
+          return this.displayAddQuestion = false;
       }
   }
 
   navigateToQuestion(questionId: string): void {
-    if (this.AuthService.isLoggedIn()) {
-        this.Router.navigate(['/pages/empty', questionId]);
-    } else {
-        this.service.add({ key: 'tst', severity: 'error', summary: 'Error', detail: 'You must be logged in to view question details.' });
-    }
-}
-    
+    this.Router.navigate(['/pages/empty', questionId]);
+  }
+
+  getTitleQuestion(question: Question): string {
+    return question.title;
+  }
+
+  getBodyQuestion(question: Question): string {
+    return question.body;
+  }
+
+  getAuthorQuestion(question: Question): string {
+    return question.author;
+  }
+
+  getTimestampQuestion(question: Question): string {
+    return question.timestamp;
+  }
+
+  getTagsQuestion(question: Question): string[] {
+    return question.tags;
+  }
+
+  getTagById(tagId: string): string {
+    return this.tagsById[tagId]? this.tagsById[tagId].name : '';
+  }
+
     
 }

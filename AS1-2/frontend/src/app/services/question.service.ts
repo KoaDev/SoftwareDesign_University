@@ -37,16 +37,14 @@ export class QuestionService {
     return this.http.put<Question>(this.url + task._id, task, { headers: this.getAuthHeaders() });
   }
 
-//router.delete('/questions/:questionId', auth, questionController.deleteQuestion);
-
   delete(_id : string) : Observable<void> {
     return this.http.delete<void>(this.url + _id, { headers: this.getAuthHeaders() });
   }
-
-  //router.post('/questions/:questionId/vote', auth, questionController.voteQuestion);
 
   voteQuestion(_id : string, vote : string) : Observable<void> {
     const body = { vote: vote, _id : _id };
     return this.http.post<void>("http://localhost:3000/api/questions/" + _id + "/vote", body, { headers: this.getAuthHeaders() });
   }
+
+  
 }
