@@ -12,14 +12,16 @@ import { QuestionService } from 'src/app/services/question.service';
 export class DashboardComponent implements OnInit {
 
     score: number = 0;
-    numQuestions: number = 0;
-    numAnswers: number = 0;
+    role: string = "";
 
     constructor(public layoutService: LayoutService, private AnswerService : AnswerService, private QuestionService : QuestionService, private AuthService : AuthService) { }
 
     ngOnInit() {
         this.AuthService.getUserScoreById(this.AuthService.getUser().id).subscribe((user) => {
             this.score = user.score;
+
+            this.role = this.AuthService.getUser().role;
+            
         });
 
         

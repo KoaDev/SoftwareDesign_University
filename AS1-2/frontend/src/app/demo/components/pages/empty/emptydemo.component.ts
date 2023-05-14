@@ -72,9 +72,8 @@ export class EmptyDemoComponent implements OnInit {
     openUpdateAnswerDialog(answerId: string): void {
         this.selectedAnswerId = answerId;
         this.displayUpdateAnswer = true;
-      }
-      
-
+    }
+    
     postAnswer() : void {
         if (this.AuthService.isLoggedIn()) {
             this.answerRequest.author = this.AuthService.getUser().id;
@@ -273,7 +272,11 @@ export class EmptyDemoComponent implements OnInit {
 
     isAuthorQuestion() : boolean {
         if (this.AuthService.isLoggedIn()) {
-            return this.AuthService.getUser().id == this.getAuthorQuestion();
+            if (this.AuthService.isModerator()){
+                return true;
+            } else {
+                return this.AuthService.getUser().id == this.getAuthorQuestion();
+            }
         } else {
             return false;
         }
@@ -331,7 +334,11 @@ export class EmptyDemoComponent implements OnInit {
 
     isAuthorAnswer(answer : Answer) : boolean {
         if (this.AuthService.isLoggedIn()) {
-            return this.AuthService.getUser().id == answer.author;
+            if (this.AuthService.isModerator()){
+                return true;
+            } else {
+                return answer.author == this.AuthService.getUser().id;
+            }
         } else {
             return false;
         }

@@ -28,6 +28,19 @@ exports.getAnswersByQuestionId = async (req, res) => {
 
 exports.updateAnswer = async (req, res) => {
   try {
+    // If the user is a moderator, update the answer without checking the author
+    if (req.userData.user.role === 'moderator') {
+      const answer = await Answer.findByIdAndUpdate(
+        req.params.answerId,
+        { body: req.body.body },
+        { new: true }
+      );
+      if (!answer)
+        return res.status(404).json({ error: 'Answer not found' });
+      return res.json(answer);
+    }
+
+    // If the user is not a moderator, check if they are the author of the answer
     const answer = await Answer.findOneAndUpdate(
       { _id: req.params.answerId, author: req.userData.user.id },
       { body: req.body.body },
@@ -41,8 +54,19 @@ exports.updateAnswer = async (req, res) => {
   }
 };
 
+
 exports.deleteAnswer = async (req, res) => {
   try {
+    // Check if the user is a moderator
+    if (req.userData.user.role === 'moderator') {
+      // If the user is a moderator, delete the answer without checking the author
+      const answer = await Answer.findByIdAndDelete(req.params.answerId);
+      if (!answer)
+        return res.status(404).json({ error: 'Answer not found' });
+      return res.status(200).json({ message: 'Answer deleted by moderator' });
+    }
+    
+    // If the user is not a moderator, check if they are the author of the answer
     const answer = await Answer.findOneAndDelete({ _id: req.params.answerId, author: req.userData.user.id });
     if (!answer)
       return res.status(404).json({ error: 'Answer not found or unauthorized' });

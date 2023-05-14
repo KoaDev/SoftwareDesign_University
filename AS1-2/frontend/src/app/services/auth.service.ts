@@ -24,8 +24,6 @@ export class AuthService {
     });
   }
 
-
-
   getUserScoreById(id: string): Observable<User> {
     const headers = this.getAuthHeaders();
     return this.http.get<User>(`${this.apiUrl}/api/users/${id}/score`, { headers });
@@ -36,8 +34,9 @@ export class AuthService {
     return this.http.put<{ token: string }>(`${this.apiUrl}/api/users/${id}/score`, {score, headers});
   }
 
-
-
+  register(name: string, email: string, password: string) {
+    return this.http.post<{ token: string }>(`${this.apiUrl}/api/users`, { name, email, password });
+  }
   
   login(email: string, password: string) {
     return this.http.post<{ token: string }>(`${this.apiUrl}/api/login`, { email, password });
@@ -63,5 +62,11 @@ export class AuthService {
 
     return false;
   }
+
+  isModerator() {
+    const user = this.getUser();
+    return user && user.role === 'moderator';
+  }
+
   
 }

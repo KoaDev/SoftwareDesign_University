@@ -50,6 +50,19 @@ const Question = require('../models/question');
   exports.updateQuestion = async (req, res) => {
     const { title, tags, body } = req.body;
     try {
+      // If the user is a moderator, update the question without checking the author
+      if (req.userData.user.role === 'moderator') {
+        const question = await Question.findByIdAndUpdate(
+          req.params.questionId,
+          { title: title, body: body, tags: tags },
+          { new: true }
+        );
+        if (!question) 
+          return res.status(404).json({ error: 'Question not found' });
+        return res.status(200).json({ message: 'Question updated by moderator' });
+      }
+  
+      // If the user is not a moderator, check if they are the author of the question
       const question = await Question.findOneAndUpdate(
         { _id: req.params.questionId, author: req.userData.user.id },
         { title: title, body: body, tags: tags },
@@ -63,17 +76,28 @@ const Question = require('../models/question');
     }
   }
   
+  
   exports.deleteQuestion = async (req, res) => {
     try {
-      const question = await Question.findOneAndDelete({ _id: req.params.questionId, author: req.userData.user.id });
-      if (!question) {
-        return res.status(404).json({ error: 'Question not found or unauthorized' });
+      // Check if the user is a moderator
+      if (req.userData.user.role === 'moderator') {
+        // If the user is a moderator, delete the question without checking the author
+        const question = await Question.findByIdAndDelete(req.params.questionId);
+        if (!question)
+          return res.status(404).json({ error: 'Question not found' });
+        return res.status(200).json({ message: 'Question deleted by moderator' });
       }
+  
+      // If the user is not a moderator, check if they are the author of the question
+      const question = await Question.findOneAndDelete({ _id: req.params.questionId, author: req.userData.user.id });
+      if (!question)
+        return res.status(404).json({ error: 'Question not found or unauthorized' });
       return res.status(200).json({ message: 'Question deleted' });
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
-  }
+  };
+  
 
   exports.voteQuestion = async (req, res) => {
     try {
