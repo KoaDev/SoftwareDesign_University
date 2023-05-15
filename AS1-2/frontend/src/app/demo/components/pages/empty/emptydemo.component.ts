@@ -113,7 +113,7 @@ export class EmptyDemoComponent implements OnInit {
         }
     }
 
-    voteAnswer(_id : string, vote : string, answer: Answer) : void {
+    voteAnswer(_id : string, vote : string, answer: Answer, _idAnswerAuthor : string) : void {
         if (this.AuthService.isLoggedIn()) {
             this.AnswerService.voteAnswer(_id, vote).subscribe({
                 next: () => {
@@ -121,10 +121,10 @@ export class EmptyDemoComponent implements OnInit {
                     if (vote == "upvote") {
                         this.service.add({ key: 'tst', severity: 'success', summary: 'Success', detail: 'Upvote success'});
 
-                        this.AuthService.getUserScoreById(this.getAuthorAnswer(answer)).subscribe({
+                        this.AuthService.getUserScoreById(_idAnswerAuthor).subscribe({
                             next: (user) => {
                                 const finalScore = user.score + 5;
-                                this.AuthService.updateUserScoreById(finalScore.toString(), this.getAuthorQuestion()).subscribe({
+                                this.AuthService.updateUserScoreById(finalScore.toString(), _idAnswerAuthor).subscribe({
                                     next: () => {
                                         this.service.add({ key: 'tst', severity: 'success', summary: 'Success', detail: 'Update score success'});
                                     },
@@ -143,10 +143,10 @@ export class EmptyDemoComponent implements OnInit {
                     } else {
                         this.service.add({ key: 'tst', severity: 'success', summary: 'Success', detail: 'Downvote success'});
 
-                        this.AuthService.getUserScoreById(this.getAuthorAnswer(answer)).subscribe({
+                        this.AuthService.getUserScoreById(_idAnswerAuthor).subscribe({
                             next: (user) => {
                                 const finalScore = user.score + -2.5;
-                                this.AuthService.updateUserScoreById(finalScore.toString(), this.getAuthorQuestion()).subscribe({
+                                this.AuthService.updateUserScoreById(finalScore.toString(), _idAnswerAuthor).subscribe({
                                     next: () => {
                                         this.service.add({ key: 'tst', severity: 'success', summary: 'Success', detail: 'Update score success'});
                                     },

@@ -68,5 +68,20 @@ export class AuthService {
     return user && user.role === 'moderator';
   }
 
+  getAllUsers(): Observable<User[]> {
+    const headers = this.getAuthHeaders();
+    return this.http.get<User[]>(`${this.apiUrl}/api/users/all`, { headers });
+  }
+
+  banUserById(id: string): Observable<User> {
+    const headers = this.getAuthHeaders();
+    return this.http.put<User>(`${this.apiUrl}/api/users/${id}/ban`, { headers });
+  }
+
+  unbanUserById(id: string): Observable<User> {
+    const headers = this.getAuthHeaders();
+    return this.http.put<User>(`${this.apiUrl}/api/users/${id}/unban`, { headers });
+  }
+
   
 }

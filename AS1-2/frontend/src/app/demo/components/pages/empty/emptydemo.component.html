@@ -60,7 +60,7 @@
                 <p-card>
                     <div class="flex align-items-start flex-column lg:justify-content-between lg:flex-row">
                         <div>
-                            <div class="font-medium text-3xl text-900">{{getAuthorAnswer(answer)}}</div>
+                            <div class="font-medium text-3xl text-900">{{answer.author.name}}</div>
                             <div class="flex align-items-center text-700 flex-wrap">
                                 <div class="flex align-items-center mt-3">
                                     <p-tag class="p-button-outlined mr-2" value="{{getTimestampAnswer(answer)}}"><i class="pi pi-clock mr-2"></i></p-tag>
@@ -70,8 +70,8 @@
                             </div>
                         </div>
                         <div class="mt-3 lg:mt-0">
-                            <button (click)="voteAnswer(answer._id, 'upvote', answer)" *ngIf="!isAuthorAnswer(answer)" pButton pRipple class="p-button-outlined mr-2" icon="pi pi-thumbs-up-fill"></button>
-                            <button (click)="voteAnswer(answer._id, 'downvote', answer)" *ngIf="!isAuthorAnswer(answer)" pButton pRipple class="p-button-outlined mr-2" icon="pi pi-thumbs-down-fill"></button>
+                            <button (click)="voteAnswer(answer._id, 'upvote', answer, answer.author._id)" *ngIf="!isAuthorAnswer(answer)" pButton pRipple class="p-button-outlined mr-2" icon="pi pi-thumbs-up-fill"></button>
+                            <button (click)="voteAnswer(answer._id, 'downvote', answer, answer.author._id)" *ngIf="!isAuthorAnswer(answer)" pButton pRipple class="p-button-outlined mr-2" icon="pi pi-thumbs-down-fill"></button>
                             <button (click)="deleteAnswer(answer._id)" *ngIf="isAuthorAnswer(answer)" pButton pRipple class="p-button-outlined mr-2" icon="pi pi-trash"></button>
                             <button (click)="openUpdateAnswerDialog(answer._id)" *ngIf="isAuthorAnswer(answer)" pButton icon="pi pi-pencil" class="p-button-outlined mr-2"></button>
                         </div>

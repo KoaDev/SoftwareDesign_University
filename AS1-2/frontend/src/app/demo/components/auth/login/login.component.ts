@@ -29,10 +29,15 @@ export class LoginComponent {
         .subscribe(
           res => {
             localStorage.setItem('token', res.token);
+
+            if (this.authService.getUser().role == "banned") {
+              alert("You are banned");
+              localStorage.removeItem('token');
+            }
+
             this.router.navigate(['']);
           },
           err => {
-            console.log(err);
             this.service.add({ key: 'tst', severity: 'error', summary: err.error.message, detail: 'Validation failed' });
           }
         );

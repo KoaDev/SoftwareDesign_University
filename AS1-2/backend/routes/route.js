@@ -19,6 +19,9 @@ router.post('/logout', auth, userController.logoutUser);
 router.put('/users/:userId/score', auth, userController.updateUserScore);
 router.delete('/users/:userId', auth, userController.deleteUser);
 
+router.put('/users/:userId/ban', auth, userController.banUser)
+router.put('/users/:userId/unban', auth, userController.unbanUser)
+
 router.get('/questions', questionController.getQuestions);
 router.get('/questions/:questionId', questionController.getQuestionById);
 router.post('/questions', auth, questionController.createQuestion);

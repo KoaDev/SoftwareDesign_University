@@ -152,3 +152,39 @@ exports.logoutUser = async (req, res) => {
     res.status(500).send('Server error');
   }
 };
+
+exports.banUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId);
+    if (!user) {
+      return res.status(400).json({ message: 'User does not exist' });
+    }
+
+    user.role = 'banned';
+    await user.save();
+
+    res.json({ message: "User banned" });
+
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+}
+
+exports.unbanUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId);
+    if (!user) {
+      return res.status(400).json({ message: 'User does not exist' });
+    }
+
+    user.role = 'user';
+    await user.save();
+
+    res.json({ message: "User unbanned" });
+
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+}

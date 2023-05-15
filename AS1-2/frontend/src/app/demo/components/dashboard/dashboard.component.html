@@ -1,4 +1,5 @@
     <div class="grid">
+        <p-toast key="tst"></p-toast>
         <div class="col-12 lg:col-6 xl:col-3">
             <div class="card mb-0">
                 <div class="flex justify-content-between mb-3">
@@ -29,5 +30,47 @@
                 <span class="text-500"></span>
             </div>
         </div>
+
+
+        <div *ngIf="isModerator()" class="col-12">
+            <div class="card">
+                <h5>List of user</h5>
+                <p-table [value]="listOfUsers" rowGroupMode="subheader" groupRowsBy="representative.name" sortField="representative.name" sortMode="single" responsiveLayout="scroll" [scrollable]="true" scrollHeight="400px">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Score</th>
+                            <th>Role</th>
+                            <th>Actions</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-user let-rowIndex="rowIndex">
+                        <tr>
+                            <td style="min-width: 200px;">
+                                {{user._id}}
+                            </td>
+                            <td style="min-width: 200px;">
+                                {{user.name}}
+                            </td>
+                            <td style="min-width: 200px;">
+                                {{user.email}}
+                            </td>
+                            <td style="min-width: 200px;">
+                                {{user.score}}
+                            </td>
+                            <td style="min-width: 200px;">
+                                {{user.role}}
+                            </td>
+                            <td style="min-width: 200px;">
+                                <button (click)="banUser(user)" pButton type="button" icon="pi pi-trash" class="p-button p-button-danger"></button> 
+                            </td>                          
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+
 </div>
 
