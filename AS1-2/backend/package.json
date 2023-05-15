@@ -8,6 +8,7 @@
     "express-validator": "^6.15.0",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.0.1",
+    "nodemailer": "^6.9.2",
     "nodemon": "^2.0.21",
     "swagger-autogen": "^2.23.1",
     "swagger-spec-to-pdf": "^1.1.0",

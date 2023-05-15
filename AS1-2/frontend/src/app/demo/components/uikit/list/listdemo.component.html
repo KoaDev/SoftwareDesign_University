@@ -23,14 +23,20 @@
 						<button pButton icon="pi pi-check" (click)="addQuestion();" label="Ok" class="p-button-outlined"></button>
 				</ng-template>
 			</p-dialog>
-			<p-dataView #dv [value]="question" [paginator]="true" [rows]="9" filterBy="name" layout="grid">
+			<p-dataView #dv [value]="question" [paginator]="true" [rows]="9" filterBy="name" layout="grid" [sortField]="sortField">
 				<ng-template pTemplate="header">
 					<div class="flex flex-column md:flex-row md:justify-content-between gap-2">
 						<button (click)="showAddQuestionPopup()" pButton icon="pi pi-user-plus" label="Add " class="p-button-outlined mr-2"></button>
 						<span class="p-input-icon-left">
-                            <i class="pi pi-search"></i>
-							<input type="search" pInputText placeholder="Search by Name">
-						</span>	
+							<i class="pi pi-search"></i>
+							<select [(ngModel)]="sortField" class="mr-2">
+								<option value="title">Title</option>
+								<option value="tag">Tag</option>
+								<option value="user">User</option>
+							</select>
+							<input type="search" pInputText placeholder="Search by Name" (input)="onFilter(dv, $event)">
+						</span>
+						
 						<p-dataViewLayoutOptions></p-dataViewLayoutOptions>
 					</div>
 				</ng-template>

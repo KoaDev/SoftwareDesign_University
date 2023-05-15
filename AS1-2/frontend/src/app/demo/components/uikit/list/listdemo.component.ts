@@ -4,6 +4,7 @@ import { QuestionService } from 'src/app/services/question.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { TagService } from 'src/app/services/tag.service';
 import { Tag } from 'src/app/models/tag';
+import { DataView } from 'primeng/dataview';
 
 import { Router } from '@angular/router';
 import { Message, MessageService } from 'primeng/api';
@@ -18,6 +19,32 @@ export class ListDemoComponent implements OnInit {
     question : Array<Question> = [];
 
     displayAddQuestion : boolean = false;
+
+    sortField: string = '';
+
+    questionsCopy: Array<Question> = [];
+
+    onFilter(dv: DataView, event: Event) {
+      this.filter(this.sortField, (event.target as HTMLInputElement).value);
+    }
+    
+    filter(field: string, term: string) {
+        switch(field) {
+            case 'title':
+                this.question = this.questionsCopy.filter((question: Question) => question.title.includes(term));
+                break;
+            case 'tag':
+                const matchingTagIds = Object.keys(this.tagsById).filter(tagId => this.tagsById[tagId].name.includes(term));
+                this.question = this.questionsCopy.filter((question: Question) => question.tags.some(tagId => matchingTagIds.includes(tagId)));
+                break;
+            case 'user':
+                this.question = this.questionsCopy.filter((question: Question) => this.AuthService.getUser().name.includes(term));
+                break;
+        }
+    }
+  
+
+
 
     questionRequest : Question = {
         title : '',
@@ -55,13 +82,14 @@ export class ListDemoComponent implements OnInit {
       });
   
       this.QuestionService.get().subscribe({
-          next: (questions : Array<Question>) => {
-              this.question = questions.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());   
-          },
-          error: (err : any) => {
-              this.service.add({ key: 'tst', severity: 'error', summary: 'Error', detail: err.message });
-          }
-      });
+        next: (questions : Array<Question>) => {
+            this.question = questions.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());   
+            this.questionsCopy = [...this.question]; // make a copy of the questions
+        },
+        error: (err : any) => {
+            this.service.add({ key: 'tst', severity: 'error', summary: 'Error', detail: err.message });
+        }
+    });
   }
 
 

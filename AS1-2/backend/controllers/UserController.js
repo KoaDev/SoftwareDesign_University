@@ -3,6 +3,19 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
 const config = require('../config/config');
+const nodemailer = require('nodemailer');
+
+
+
+let transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'stackoverflowassignement@gmail.com', // your gmail account
+    pass: 'jrwvtwswvowdtjap' // your gmail password
+  }
+});
+
+
 
 exports.createUser = async (req, res) => {
   const errors = validationResult(req);
@@ -163,6 +176,21 @@ exports.banUser = async (req, res) => {
     user.role = 'banned';
     await user.save();
 
+    let mailOptions = {
+      from: process.env.EMAIL_USERNAME,
+      to: user.email,
+      subject: 'You Have Been Banned',
+      text: 'You have been banned from our platform. If you believe this is a mistake, please contact our support team.'
+    };
+
+    transporter.sendMail(mailOptions, function(error, info){
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    }); 
+
     res.json({ message: "User banned" });
 
   } catch (err) {
@@ -170,6 +198,7 @@ exports.banUser = async (req, res) => {
     res.status(500).send('Server error');
   }
 }
+
 
 exports.unbanUser = async (req, res) => {
   try {
