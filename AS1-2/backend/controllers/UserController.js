@@ -5,17 +5,13 @@ const { validationResult } = require('express-validator');
 const config = require('../config/config');
 const nodemailer = require('nodemailer');
 
-
-
 let transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'stackoverflowassignement@gmail.com', // your gmail account
-    pass: 'jrwvtwswvowdtjap' // your gmail password
+    user: 'stackoverflowassignement@gmail.com',
+    pass: 'jrwvtwswvowdtjap'
   }
 });
-
-
 
 exports.createUser = async (req, res) => {
   const errors = validationResult(req);
